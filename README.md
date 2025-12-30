@@ -4,9 +4,7 @@
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" alt="">
 
 - 👀 喜欢研究一些有趣的软件和网站。
-- 🌱 我正在学习Java，JavaScript，以及Python。
-- 📫 如何联系我？[Telegram chat](https://t.me/naisi_chat_bot)，[发送邮件](mailto:super@vime50.com?subject=我从GitHub跳转而来想要与您建立沟通)
-
+- 🌱 我正在学习Java，JavaScript，c++, 以及Python。
 
 ### 🏄 个人仓库推荐
 
