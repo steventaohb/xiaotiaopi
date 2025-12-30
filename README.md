@@ -14,18 +14,4 @@
 
 2️⃣ [global-testflight-link](https://github.com/fmz200/global-testflight-link)： 收集苹果公开的iOS/iPadOS/MacOS Testflight链接。/ Collect Apple's public iOS/iPadOS/MacOS Testflight links.。
 
-3️⃣ [video-hub](https://github.com/Video-Hub-Org/video-hub)：一个简单的小红书、抖音、TikTok图片和视频批量下载和预览工具。
-
-
-### 🏅 统计卡牌
-[![Anurag's github stats](https://github-readme-stats.vercel.app/api?username=fmz200&show_icons=true&theme=onedark)](https://github.com/anuraghazra/github-readme-stats)
-
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=fmz200&layout=compact&theme=onedark)](https://github.com/anuraghazra/github-readme-stats)
-
-
-### 🧚‍♀️ 访问量统计
-开始于 2025.09.13
-
-![GitHub Profile Views](https://komarev.com/ghpvc/?username=fmz200&color=green)
-
-<!---   ![Visitor Count](https://profile-counter.glitch.me/fmz200/count.svg)    --->
+3️⃣ [video-hub](https://github.com/Video-Hub-Org/video-hub)：一个简单的小红书、抖音、TikTok图片和视频批量下载和预览
