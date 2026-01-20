@@ -3,7 +3,9 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface CC2x3MusicPlayerViewController ()
+// 音乐播放器
 @property (nonatomic, strong) MPMusicPlayerController *musicPlayer;
+// UI 控件（2×3 布局：歌曲名/歌手 + 上一曲/播放/下一曲）
 @property (nonatomic, strong) UILabel *songTitleLabel;
 @property (nonatomic, strong) UILabel *singerLabel;
 @property (nonatomic, strong) UIButton *prevBtn;
@@ -15,6 +17,7 @@ implementation CC2x3MusicPlayerViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // 1. 初始化视图背景与尺寸（适配控制中心暗黑模式）
     self.view.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.8];
     self.view.layer.cornerRadius = 12;
     self.view.clipsToBounds = YES;
