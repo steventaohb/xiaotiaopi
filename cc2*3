@@ -1,0 +1,21 @@
+#import "CC2x3MusicPlayerViewController.h"
+#import <ControlCenterUIKit/ControlCenterUIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
+
+@interface CC2x3MusicPlayerViewController ()
+@property (nonatomic, strong) MPMusicPlayerController *musicPlayer;
+@property (nonatomic, strong) UILabel *songTitleLabel;
+@property (nonatomic, strong) UILabel *singerLabel;
+@property (nonatomic, strong) UIButton *prevBtn;
+@property (nonatomic, strong) UIButton *playPauseBtn;
+@property (nonatomic, strong) UIButton *nextBtn;
+@end
+
+implementation CC2x3MusicPlayerViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.8];
+    self.view.layer.cornerRadius = 12;
+    self.view.clipsToBounds = YES;
+    
