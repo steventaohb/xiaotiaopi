@@ -3,7 +3,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface CC2x3MusicPlayerViewController ()
-// 音乐播放器
+// 音乐播放器实例
 @property (nonatomic, strong) MPMusicPlayerController *musicPlayer;
 // UI 控件（2×3 布局：歌曲名/歌手 + 上一曲/播放/下一曲）
 @property (nonatomic, strong) UILabel *songTitleLabel;
@@ -13,7 +13,7 @@
 @property (nonatomic, strong) UIButton *nextBtn;
 @end
 
-implementation CC2x3MusicPlayerViewController
+@implementation CC2x3MusicPlayerViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -22,3 +22,123 @@ implementation CC2x3MusicPlayerViewController
     self.view.layer.cornerRadius = 12;
     self.view.clipsToBounds = YES;
     
+    // 2. 初始化系统音乐播放器
+    self.musicPlayer = [MPMusicPlayerController systemMusicPlayer];
+    [self.musicPlayer beginGeneratingPlaybackNotifications];
+    
+    // 3. 注册播放状态通知（实时更新 UI）
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playbackStateDidChange:)
+                                                 name:MPMusicPlayerControllerPlaybackStateDidChangeNotification
+                                               object:self.musicPlayer];
+    
+    // 4. 构建 2×3 布局 UI
+    [self setup2x3LayoutUI];
+    // 5. 初始化 UI 数据（显示当前播放歌曲）
+    [self updateCurrentPlayingInfo];
+}
+
+#pragma mark - 核心：2×3 布局 UI 构建
+- (void)setup2x3LayoutUI {
+    // 布局说明：
+    // 第1-2行：歌曲名 + 歌手名（占满2列）
+    // 第3行：上一曲按钮（左列） + 播放/暂停按钮（中列） + 下一曲按钮（右列）
+    
+    // 1. 歌曲名标签（第1行，2列）
+    self.songTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, self.view.bounds.size.width - 30, 25)];
+    self.songTitleLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
+    self.songTitleLabel.textColor = [UIColor whiteColor];
+    self.songTitleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.songTitleLabel];
+    
+    // 2. 歌手名标签（第2行，2列）
+    self.singerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 40, self.view.bounds.size.width - 30, 20)];
+    self.singerLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    self.singerLabel.textColor = [UIColor lightGrayColor];
+    self.singerLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.singerLabel];
+    
+    // 3. 按钮通用样式（线性图标，适配简约风格）
+    CGFloat btnWidth = (self.view.bounds.size.width - 40) / 3;
+    CGFloat btnHeight = 30;
+    CGFloat btnY = 75;  // 第3行位置
+    
+    // 4. 上一曲按钮（第3行左列）
+    self.prevBtn = [self createMusicBtnWithTitle:@"⏮️" frame:CGRectMake(10, btnY, btnWidth, btnHeight)];
+    [self.prevBtn addTarget:self action:@selector(prevSongAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.prevBtn];
+    
+    // 5. 播放/暂停按钮（第3行中列）
+    self.playPauseBtn = [self createMusicBtnWithTitle:@"▶️" frame:CGRectMake(btnWidth + 15, btnY, btnWidth, btnHeight)];
+    [self.playPauseBtn addTarget:self action:@selector(playPauseAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.playPauseBtn];
+    
+    // 6. 下一曲按钮（第3行右列）
+    self.nextBtn = [self createMusicBtnWithTitle:@"⏭️" frame:CGRectMake(btnWidth * 2 + 20, btnY, btnWidth, btnHeight)];
+    [self.nextBtn addTarget:self action:@selector(nextSongAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.nextBtn];
+}
+
+#pragma mark - 工具方法：创建通用音乐按钮
+- (UIButton *)createMusicBtnWithTitle:(NSString *)title frame:(CGRect)frame {
+    UIButton *btn = [[UIButton alloc] initWithFrame:frame];
+    [btn setTitle:title forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    btn.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.6];
+    btn.layer.cornerRadius = 8;
+    return btn;
+}
+
+#pragma mark - 音乐控制逻辑
+// 上一曲
+- (void)prevSongAction:(UIButton *)sender {
+    [self.musicPlayer skipToPreviousItem];
+}
+
+// 播放/暂停切换
+- (void)playPauseAction:(UIButton *)sender {
+    if (self.musicPlayer.playbackState == MPMusicPlaybackStatePlaying) {
+        [self.musicPlayer pause];
+        [sender setTitle:@"▶️" forState:UIControlStateNormal];
+    } else {
+        [self.musicPlayer play];
+        [sender setTitle:@"⏸️" forState:UIControlStateNormal];
+    }
+}
+
+// 下一曲
+- (void)nextSongAction:(UIButton *)sender {
+    [self.musicPlayer skipToNextItem];
+}
+
+#pragma mark - 播放状态监听：更新 UI
+- (void)playbackStateDidChange:(NSNotification *)notification {
+    // 实时更新播放/暂停按钮图标
+    if (self.musicPlayer.playbackState == MPMusicPlaybackStatePlaying) {
+        [self.playPauseBtn setTitle:@"⏸️" forState:UIControlStateNormal];
+    } else {
+        [self.playPauseBtn setTitle:@"▶️" forState:UIControlStateNormal];
+    }
+    // 更新当前播放歌曲信息
+    [self updateCurrentPlayingInfo];
+}
+
+// 更新歌曲名和歌手名
+- (void)updateCurrentPlayingInfo {
+    MPMediaItem *currentItem = self.musicPlayer.nowPlayingItem;
+    if (currentItem) {
+        self.songTitleLabel.text = [currentItem valueForProperty:MPMediaItemPropertyTitle] ?: @"未知歌曲";
+        self.singerLabel.text = [currentItem valueForProperty:MPMediaItemPropertyArtist] ?: @"未知歌手";
+    } else {
+        self.songTitleLabel.text = @"未播放音乐";
+        self.singerLabel.text = @"";
+    }
+}
+
+#pragma mark - 销毁通知
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.musicPlayer endGeneratingPlaybackNotifications];
+}
+
+@end
