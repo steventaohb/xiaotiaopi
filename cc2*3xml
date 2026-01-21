@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CCModuleIdentifier</key>
+    <string>com.yourname.cc2x3musicplayer</string>
+    <key>CCModuleName</key>
+    <string>2x3 Music Player</string>
+    <key>CCModuleClass</key>
+    <string>CC2x3MusicPlayerViewController</string>
+    <key>CCModuleSize</key>
+    <dict>
+        <key>width</key>
+        <integer>2</integer>  <!-- 2列 -->
+        <key>height</key>
+        <integer>3</integer>  <!-- 3行 -->
+    </dict>
+    <key>CCModulePriority</key>
+    <integer>100</integer>  <!-- 显示优先级，值越大越靠前 -->
+    <key>CCModuleSupportedDeviceFamilies</key>
+    <array>
+        <integer>1</integer>  <!-- iPhone -->
+    </array>
+</dict>
+</plist>
